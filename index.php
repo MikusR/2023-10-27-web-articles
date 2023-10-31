@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Article;
 use App\Response;
+use Carbon\Carbon;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -55,6 +56,7 @@ $twig->addExtension(new \Twig\Extension\DebugExtension());
 
             $view = $response->getViewName();
             $data = $response->getData();
+            $data['generated'] = Carbon::now();
             echo $twig->render("$view.twig", $data);
 
             break;
