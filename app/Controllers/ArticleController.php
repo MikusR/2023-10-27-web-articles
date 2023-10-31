@@ -2,24 +2,33 @@
 
 namespace App\Controllers;
 
+use App\articleCollection;
 use App\Models\Article;
 use App\Response;
 
 class ArticleController
 {
+    private articleCollection $articles;
+
+    public function __construct()
+    {
+        $this->articles = new articleCollection();
+    }
+
     public function index(): Response
     {
         return new Response('articles.index', [
-                'articles' => [
-                    new Article('Title 1', 'Content 1'),
-                    new Article('Title 2', 'Content 2')
-                ]
+                'articles' => $this->articles->list()
             ]
         );
     }
 
-    public function show(): array
+    public function show(int $id): Response
     {
-        return [new Article('Title 3', 'Content 3')];
+        $article = $this->articles->get($id);
+        return new Response(
+            'single.article',
+            ['article' => $article]
+        );
     }
 }

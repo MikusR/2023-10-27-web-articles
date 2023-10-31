@@ -7,8 +7,9 @@ use App\Models\Article;
 require_once 'vendor/autoload.php';
 {
     $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $router) {
+        $router->addRoute('GET', '/', ['App\Controllers\ArticleController', 'index']);
         $router->addRoute('GET', '/articles', ['App\Controllers\ArticleController', 'index']);
-        $router->addRoute('GET', '/article', ['App\Controllers\ArticleController', 'show']);
+        $router->addRoute('GET', '/article/{id:\d+}', ['App\Controllers\ArticleController', 'show']);
     });
 
 // Fetch method and URI from somewhere
@@ -34,15 +35,9 @@ require_once 'vendor/autoload.php';
             $handler = $routeInfo[1];
             $vars = $routeInfo[2];
             [$className, $method] = $handler;
-            $response = (new $className)->{$method}();
-            /**
-             * @var Article $item
-             */
-            foreach ($response as $item) {
-                echo $item->getTitle() . "</br>";
-                echo $item->getContent() . "</br>";
-            }
-
+            $id = (isset($vars['id'])) ? (int)$vars['id'] : null;
+            $response = (new $className())->{$method}($id);
+            var_dump($response);
             break;
     }
 }

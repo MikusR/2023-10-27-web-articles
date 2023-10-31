@@ -20,4 +20,12 @@ class Response
     {
         return $this->data;
     }
+
+    /**
+     * @return string
+     */
+    public function getViewName(): string
+    {
+        return $this->viewName;
+    }
 }
